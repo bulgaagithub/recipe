@@ -1,9 +1,8 @@
-const arr = [23, 44, 12];
+// ./ current folder
+import query from './model/Search';
 
-let myFunc = a => {
-    console.log(`too : ${a}`);
-}
+import { add as niilber, multiply as mul } from "./view/searchView";
 
-const arr2 = [...arr,44,1223];
+console.log("Хайлт : " + query);
 
-myFunc(arr2[1]);
+console.log("Хоёр тооны нийлбэр : " + niilber(4, 5));

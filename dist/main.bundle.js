@@ -1,1 +1,1 @@
-(()=>{var o;o=[].concat([23,44,12],[44,1223])[1],console.log("too : ".concat(o))})();
+(()=>{"use strict";console.log("Хайлт : pizza"),console.log("Хоёр тооны нийлбэр : 1009")})();
