@@ -1,8 +1,22 @@
 // ./ current folder
-import query from './model/Search';
+require('@babel/polyfill');
+import axios from "axios";
 
-import { add as niilber, multiply as mul } from "./view/searchView";
+async function doSearch(search) {
+    try {
+        let result = await axios('https://forkify-api.herokuapp.com/api/search?q=' + search);
+        // console.log(result.data.recipes);
+    
+        const recipes = result.data.recipes;
+        console.log(recipes);
+    
+        result = await axios('https://forkify-api.herkuapp.com/api/get?rId=' + recipes[1].recipe_id);
+    
+        console.log(result);
+    } catch(error) {
+        alert('Алдаа гарлаа: ' + error);
+    }
+    
+}
 
-console.log("Хайлт : " + query);
-
-console.log("Хоёр тооны нийлбэр : " + niilber(4, 5));
+doSearch('pizza');
