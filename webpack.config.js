@@ -11,11 +11,11 @@ module.exports = {
     })
   ],
   devServer: {
-    contentBase: './dist',
+    contentBase: './docs',
   },
   output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: 'js/[name].bundle.js',
+    path: path.resolve(__dirname, 'docs'),
   },
   module: {
     rules: [
