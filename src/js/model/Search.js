@@ -13,7 +13,7 @@ export default class Search {
         "https://forkify-api.herokuapp.com/api/search?q=" + this.query
       );
 
-      this.result = result.data;
+      this.result = result.data.recipes;
       return this.result; // Remember this function will return promise 
     } catch (error) {
       alert("Алдаа гарлаа: " + error);
