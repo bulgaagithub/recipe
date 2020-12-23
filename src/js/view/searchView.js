@@ -1,35 +1,34 @@
-require('@babel/polyfill');
+import { elements } from "./base";
 
-import Search from "../model/Search";
+// private function
+const renderRecipe = (recipe) => {
 
-/**
- * Web app state 
- * - Хайлтын query, үр дүн
- * - Тухайн үзүүлж байгаа жор
- * - Лайкалсан жорууд 
- * - Захиалж байгаа жорын найрлагууд
- */
+  const markup = `
+    <li>
+        <a class="results__link results__link--active" href="#${recipe.recipe_id}">
+            <figure class="results__fig">
+                <img src="${recipe.image_url}" alt="Test">
+            </figure>
+            <div class="results__data">
+                <h4 class="results__name">${recipe.title}</h4>
+                <p class="results__author">${recipe.publisher}</p>
+            </div>
+        </a>
+    </li>
+    `;
 
- const state = {};
+    // ul рүүгээ нэмнэ
+    elements.searchResultsList.insertAdjacentHTML('beforeend', markup);
+};
 
- const controlSearch = async () => {
-     // 1) Вэбээс хайлтын түлхүүр үгийг гаргаж авна. 
-    const query = "pizza";
-    
-     if(query) {
-        // 2) Шинээр хайлтын объектийг үүсгэж өгнө.
-        state.search = new Search(query);
-        // 3) Хайлт хийхэд зориулж дэлгэцийг UI бэлтгэнэ. 
-        // 4) Хайлтыг гүйцэтгэнэ.
-        await state.search.doSearch();
-        // 5) Хайлтын үр дүнг дэлгэцэнд үзүүлнэ.
-        
-        console.log('Result: ' + state.search.result);
-    }
- }
+export const clearSearchQuery = () => { elements.searchInput.value = '' };
 
-document.querySelector('.search').addEventListener('submit', e => {
-    // default behaviour clear
-    e.preventDefault(); // default үйл ажиллагааг зогсоох
-    controlSearch();
-});
+export const clearSearchResult = () => {
+    elements.searchResultsList.innerHTML = '';
+}
+
+export const getInput = () => elements.searchInput.value;
+
+export const renderRecipes = (recipes) => {
+  recipes.forEach(renderRecipe);
+};

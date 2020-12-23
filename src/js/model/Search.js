@@ -16,7 +16,7 @@ export default class Search {
       this.result = result.data.recipes;
       return this.result; // Remember this function will return promise 
     } catch (error) {
-      alert("Алдаа гарлаа: " + error);
+      console.log("Алдаа гарлаа: " + error);
     }
   }
 }
