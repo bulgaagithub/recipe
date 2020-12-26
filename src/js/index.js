@@ -3,6 +3,7 @@
 require('@babel/polyfill');
 
 import Search from "./model/Search";
+import Recipe from "./model/Recipe";
 
 import {elements, renderLoader, clearLoader} from './view/base';
 
@@ -41,3 +42,18 @@ import * as searchView from './view/searchView';
     e.preventDefault(); // default үйл ажиллагааг зогсоох
     controlSearch();
 });
+
+elements.pageButtons.addEventListener('click', e => {
+    // дарагдсан товчийг шууд олох 
+    // closest хамгийн ойр байгаа element-ийг олж өгнө. 
+    // e.target dom element 
+    const btn = e.target.closest('.btn-inline');
+
+    if(btn) {
+        searchView.clearSearchResult();
+        searchView.renderRecipes(state.search.result, parseInt(btn.dataset.goto));
+    }
+});
+
+const r = new Recipe(47746);
+r.getRecipe();
