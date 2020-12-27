@@ -18,6 +18,13 @@ import * as searchView from './view/searchView';
 
  const state = {};
 
+/**
+ * MVC architecture
+ * Model ===> Controller <=== View
+ * 1. Search Controller
+ * 2. Recipe Controller
+ */
+
  const controlSearch = async () => {
      // 1) Вэбээс хайлтын түлхүүр үгийг гаргаж авна. 
     const query = searchView.getInput();
@@ -55,5 +62,32 @@ elements.pageButtons.addEventListener('click', e => {
     }
 });
 
-const r = new Recipe(47746);
-r.getRecipe();
+/**
+ * Жорын контроллер
+ */
+
+const controlRecipe = async () => {
+
+    // 1) URL-аас ID-ийг салгаж авна.
+    const id = window.location.hash.replace("#", "");
+    console.log(id);
+
+    // 2) Жорын моделийг үүсгэж өгнө.
+    state.recipe = new Recipe(parseInt(id));
+
+    // 3) UI дэлгэцийг бэлтгэнэ.
+
+    // 4) Жороо татаж авчирна. 
+
+    await state.recipe.getRecipe();
+
+    // 5) Жорыг гүйцэтгэх хугацаа болон орцыг тооцоолно.
+    state.recipe.calcTime();
+    state.recipe.calcHuniiToo();
+
+    // 6) Жороо дэлгэцэнд гаргана. 
+    console.log(state.recipe);
+
+
+}
+ window.addEventListener('hashchange', controlRecipe);
