@@ -5,6 +5,8 @@ require('@babel/polyfill');
 import Search from "./model/Search";
 import Recipe from "./model/Recipe";
 
+import {renderRecipe, clearRecipe, highlightSelectRecipe} from "./view/recipeView";
+
 import {elements, renderLoader, clearLoader} from './view/base';
 
 import * as searchView from './view/searchView';
@@ -70,24 +72,27 @@ const controlRecipe = async () => {
 
     // 1) URL-аас ID-ийг салгаж авна.
     const id = window.location.hash.replace("#", "");
-    console.log(id);
 
     // 2) Жорын моделийг үүсгэж өгнө.
     state.recipe = new Recipe(parseInt(id));
 
     // 3) UI дэлгэцийг бэлтгэнэ.
-
+    clearRecipe();
+    renderLoader(elements.recipeDiv);
+    highlightSelectRecipe(id);
     // 4) Жороо татаж авчирна. 
 
     await state.recipe.getRecipe();
 
     // 5) Жорыг гүйцэтгэх хугацаа болон орцыг тооцоолно.
+    clearLoader();
     state.recipe.calcTime();
     state.recipe.calcHuniiToo();
 
     // 6) Жороо дэлгэцэнд гаргана. 
-    console.log(state.recipe);
+    renderRecipe(state.recipe);
 
 
 }
  window.addEventListener('hashchange', controlRecipe);
+ window.addEventListener('load', controlRecipe);
