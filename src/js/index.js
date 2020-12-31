@@ -16,6 +16,7 @@ import { elements, renderLoader, clearLoader } from "./view/base";
 
 import * as searchView from "./view/searchView";
 import * as listView from "./view/listView";
+import Likes from "./model/Like";
 
 /**
  * Web app state
@@ -129,11 +130,35 @@ const controlList = () => {
     });
 };
 
+
+/**
+ * Like controller 
+ */
+
+const controllerLike = () => {
+  // Дарагдсан жорыг авч модел руу хийх 
+  // 1) Лайкийн моделийг үүсгэнэ.
+  if(!state.likes) state.likes = new Likes();
+  // 2) Одоо харагдаж байгаа жорын ID-г олж авах 
+  const currentRecipeId = state.recipe.id;
+  // 3) Энэ жорыг лайкалсан эсэхийг шалгах 
+  if(state.likes.isLiked(currentRecipeId)) {
+    // Лайкалсан бол лайкийг болиулна.
+    state.likes.deleteLike(currentRecipeId);
+  } else {
+    // Лайкалаагүй бол лайкална. 
+    state.likes.addLike(currentRecipeId, state.recipe.title, state.recipe.publisher, state.recipe.image_url);
+  } 
+}
+
 elements.recipeDiv.addEventListener('click', (e) => {
     if(e.target.matches('.recipe__btn, .recipe__btn *')) {
-        controlList();
+      controlList();
+    } else if(e.target.matches('.recipe__love, .recipe__love *')){
+      controllerLike();
     }
 });
+
 
 elements.shoppingList.addEventListener('click', (e) => {
     // Click хийсэн li элементийн data-itemid аттрибутыг шүүж гаргаж авах
