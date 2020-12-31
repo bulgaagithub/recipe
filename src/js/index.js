@@ -29,9 +29,6 @@ import Like from "./model/Like";
 
 const state = {};
 
-// like menu hidden
-likesView.toggleLikeMenu(0);
-
 /**
  * MVC architecture
  * Model ===> Controller <=== View
@@ -83,7 +80,6 @@ elements.pageButtons.addEventListener("click", (e) => {
 const controlRecipe = async () => {
   // 1) URL-аас ID-ийг салгаж авна.
   const id = window.location.hash.replace("#", "");
-  if(!state.likes) state.likes = new Like();
   // ID on browser url section
   if (id) {
     // 2) Жорын моделийг үүсгэж өгнө.
@@ -112,6 +108,18 @@ const controlRecipe = async () => {
 // window.addEventListener("load", controlRecipe);
 
 ['hashchange', 'load'].forEach(e => window.addEventListener(e, controlRecipe));
+
+window.addEventListener("load", e => {
+  // Шинээр лайз моделийг апп дөнгөж ачаалагдахад үүсгэнэ.
+  if(!state.likes) state.likes = new Like();
+
+  // like menu hidden
+  likesView.toggleLikeMenu(state.likes.getNumberOfLikes());
+
+  // Лайкууд байвал тэдгээрийг цэсэнд нэмж харуулна. 
+  state.likes.likes.forEach(like => likesView.renderLike(like));
+
+});
 
 /**
  * Ingredients Controller 
