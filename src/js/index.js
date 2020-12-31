@@ -16,7 +16,8 @@ import { elements, renderLoader, clearLoader } from "./view/base";
 
 import * as searchView from "./view/searchView";
 import * as listView from "./view/listView";
-import Likes from "./model/Like";
+import * as likesView from "./view/likesView";
+import Like from "./model/Like";
 
 /**
  * Web app state
@@ -27,6 +28,9 @@ import Likes from "./model/Like";
  */
 
 const state = {};
+
+// like menu hidden
+likesView.toggleLikeMenu(0);
 
 /**
  * MVC architecture
@@ -79,7 +83,7 @@ elements.pageButtons.addEventListener("click", (e) => {
 const controlRecipe = async () => {
   // 1) URL-аас ID-ийг салгаж авна.
   const id = window.location.hash.replace("#", "");
-
+  if(!state.likes) state.likes = new Like();
   // ID on browser url section
   if (id) {
     // 2) Жорын моделийг үүсгэж өгнө.
@@ -99,7 +103,7 @@ const controlRecipe = async () => {
     state.recipe.calcHuniiToo();
 
     // 6) Жороо дэлгэцэнд гаргана.
-    renderRecipe(state.recipe);
+    renderRecipe(state.recipe, state.likes.isLiked(parseInt(id)));
   }
 
 };
@@ -138,17 +142,31 @@ const controlList = () => {
 const controllerLike = () => {
   // Дарагдсан жорыг авч модел руу хийх 
   // 1) Лайкийн моделийг үүсгэнэ.
-  if(!state.likes) state.likes = new Likes();
+  if(!state.likes) state.likes = new Like();
   // 2) Одоо харагдаж байгаа жорын ID-г олж авах 
   const currentRecipeId = state.recipe.id;
   // 3) Энэ жорыг лайкалсан эсэхийг шалгах 
   if(state.likes.isLiked(currentRecipeId)) {
     // Лайкалсан бол лайкийг болиулна.
     state.likes.deleteLike(currentRecipeId);
+
+    // Лайкын цэснээс устгана.
+    likesView.deleteLike(currentRecipeId);
+
+    // Toggle like button hide
+    likesView.toggleLikeBtn(false);
   } else {
     // Лайкалаагүй бол лайкална. 
-    state.likes.addLike(currentRecipeId, state.recipe.title, state.recipe.publisher, state.recipe.image_url);
-  } 
+    const newLike = state.likes.addLike(currentRecipeId, state.recipe.title, state.recipe.publisher, state.recipe.image_url);
+    
+    // add like to like menu
+    likesView.renderLike(newLike);
+    
+    // Like button toggle show
+    likesView.toggleLikeBtn(true);
+  }
+  
+  likesView.toggleLikeMenu(state.likes.getNumberOfLikes());
 }
 
 elements.recipeDiv.addEventListener('click', (e) => {

@@ -18,11 +18,11 @@ export const highlightSelectRecipe = id => {
     // const arr = Array.from(document.querySelectorAll('.results__link'));
     // arr.forEach((e) => e.classList.remove('results__link--active'));
 
-    const el = document.querySelector(`a[href*="${id}"]`);
+    const el = document.querySelector(`.results__link[href*="${id}"]`);
     if(el !== null)
     {
         if (activeRecipe === null ) {
-            activeRecipe = document.querySelector(`a[href*="${id}"]`);
+            activeRecipe = el;
         } else {
             activeRecipe.classList.remove('results__link--active');
             activeRecipe = el;
@@ -36,7 +36,7 @@ export const clearRecipe = () => {
   elements.recipeDiv.innerHTML = "";
 };
 
-export const renderRecipe = (recipe) => {
+export const renderRecipe = (recipe, isLike) => {
   // Энэ жорыг дэлгэцэнд гаргаж үзүүлнэ.
   const html = `<figure class="recipe__fig">
     <img src="${recipe.image_url}" alt="${recipe.title}" class="recipe__img">
@@ -79,7 +79,7 @@ export const renderRecipe = (recipe) => {
     </div>
     <button class="recipe__love">
         <svg class="header__likes">
-            <use href="img/icons.svg#icon-heart-outlined"></use>
+            <use href="img/icons.svg#icon-heart${isLike ? '' : '-outlined'}"></use>
         </svg>
     </button>
 </div>
